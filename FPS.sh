@@ -28,8 +28,8 @@ totalAvTime=0
 # INPUT INIT
 
 clear
-echo "If no input given, default refresh rate is 0.25 s."
-echo "Input Refresh Rate (s):"
+printf "If no input given, default refresh rate is 0.25 s.\n"
+printf "Input Refresh Rate (s):"
 read step
 
 if [[ -z "$step" ]] # If no input to variable $step
@@ -38,13 +38,13 @@ then
 elif [ $step -lt $maxSpeed ] # If the input step size is too small
 then
 	step=$maxSpeed
-	echo "Refresh rate is too quick, setting to the maximum allowable speed, $step s"
+	printf "Refresh rate is too quick, setting to the maximum allowable speed, %.2f s" $step
 	sleep 3
 fi
 
 clear
-echo "If no input given, default sample length is 4 s."
-echo "Input sample length for average calculation (s):"
+printf "If no input given, default sample length is 4 s.\n"
+printf "Input sample length for average calculation (s):"
 read avStep
 
 if [[ -z "$avStep" ]]
@@ -53,7 +53,7 @@ then
 elif [ $avStep -lt 1 ]
 then
 	avStep=1
-	echo "Average becomes useless below 1 second, setting to 1."
+	printf "Average becomes useless below 1 second, setting to 1."
 	sleep 2
 fi
 
@@ -94,11 +94,9 @@ do
 
 	# Printing
 	clear
-	echo "FPS: $(( x / step))"    
-	echo "Short Average: $average      +($avDiff) / $avStep s"
-	printf "All Time Average: %.0f      (%.2f s)" $atAv $totalAvTime
+	printf "FPS: %.0f\n" $(( x / step))
+	printf "Short Average: %.0f      +(%.0f) / %.2f s\n" $average $avDiff $avStep
+	printf "All Time Average: %.0f      (%.2f s)\n" $atAv $totalAvTime
 	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
-
-
 
 done
