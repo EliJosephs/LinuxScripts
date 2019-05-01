@@ -19,7 +19,7 @@
 maxSpeed=0.05 # Arbitrary value, but beyond this, the output numbers change so quick it's pointless, and the "sample" size becomes so small that tiny errors result in large changes to the output. For example, the FPS reads as either 2000 or 0, which we know is incorrect. The loop can't run long enough to count an appreciable amount of times per time interval. Even at this number, especially on sloer machines, the resulting FPS will have a high error. Longer intervals will result in less error. 
 averageStart=0
 totalCount=0
-avStep=10
+avStep=4
 average=0
 
 # INPUT
@@ -47,7 +47,6 @@ do
 
 	x=0
 	startTime=`date +%s.%N`
-	averageStart=`date +%s.%N`
 	
 	while [ `date +%s.%N` -lt $((startTime + step)) ]
 	do
@@ -55,20 +54,20 @@ do
 	done
 
 	clear
-	echo "FPS: $(( x / step))\nAverage is $average"
-
+	echo "FPS: $(( x / step))    Average is: $average"
+	echo "Debug line: $(( `date +%s.%N` - averageStart ))"
 
 	# Average calculation
-	if [ $averageStart == 0 ]
+	if [ $averageStart -eq 0 ]
 	then 
-		averageStart=`date %s.%N`
+		averageStart=`date +%s.%N`
 	elif [ $(( `date +%s.%N` - averageStart )) -gt $avStep ]
 	then 
 		average=$(( totalCount / avStep ))
 		averageStart=0
 		totalCount=0
 	else
-		totalCount=$totalCount + $x	
+		totalCount=$(( totalCount + x ))	
 	fi
 
 done
