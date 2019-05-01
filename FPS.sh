@@ -22,6 +22,8 @@ totalCount=0
 avStep=4
 average=0
 avDiff=0;
+totalAvTime=0
+
 
 # INPUT INIT
 
@@ -71,14 +73,6 @@ do
 		x=$((x + 1)) # Count for time $step
 	done
 
-
-	# Printing
-	clear
-	echo "FPS: $(( x / step))"    
-	echo "Average is: $average      +($avDiff) / $avStep s"
-	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
-
-
 	# Average calculation
 	if [ $averageStart -eq 0 ]
 	then 
@@ -93,5 +87,18 @@ do
 	else
 		totalCount=$(( totalCount + x ))	
 	fi
+
+	totalAv=$(( totalAv + x ))
+	totalAvTime=$(( totalAvTime + step ))
+	atAv=$(( totalAv / totalAvTime ))
+
+	# Printing
+	clear
+	echo "FPS: $(( x / step))"    
+	echo "Short Average: $average      +($avDiff) / $avStep s"
+	printf "All Time Average: %.0f      (%.2f s)" $atAv $totalAvTime
+	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
+
+
 
 done
