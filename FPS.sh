@@ -21,6 +21,7 @@ averageStart=0
 totalCount=0
 avStep=4
 average=0
+avDiff=0;
 
 # INPUT
 
@@ -44,18 +45,24 @@ fi
 
 while : 
 do
-
+	# Local repeated INIT
 	x=0
 	startTime=`date +%s.%N`
+
 	
+	# FPS loop, not affected by how long the file becomes
 	while [ `date +%s.%N` -lt $((startTime + step)) ]
 	do
-		x=$((x + 1)) # Count for length $step
+		x=$((x + 1)) # Count for time $step
 	done
 
+
+	# Printing
 	clear
-	echo "FPS: $(( x / step))    Average is: $average"
-	echo "Debug line: $(( `date +%s.%N` - averageStart ))"
+	echo "FPS: $(( x / step))"    
+	echo "Average is: $average      +($avDiff) / $avStep s"
+	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
+
 
 	# Average calculation
 	if [ $averageStart -eq 0 ]
@@ -63,7 +70,9 @@ do
 		averageStart=`date +%s.%N`
 	elif [ $(( `date +%s.%N` - averageStart )) -gt $avStep ]
 	then 
+		avDiff=$average
 		average=$(( totalCount / avStep ))
+		avDiff=$(( average-avDiff ))
 		averageStart=0
 		totalCount=0
 	else
