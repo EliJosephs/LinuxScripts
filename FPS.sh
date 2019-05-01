@@ -117,7 +117,7 @@ do
 	printf "FPS: %.0f\n" $(( x / step))
 	printf "Short Average: %.0f      +(%.0f) / %.2f s\n" $average $avDiff $avStep
 	printf "All Time Average: %.0f      (%.2f s)\n\n" $atAv $totalAvTime
-	printf "Max: %.0f\nMin: %.0f" $max $min
+	printf "Max: %.0f\nMin: %.0f\n" $max $min
 	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
 
 	
