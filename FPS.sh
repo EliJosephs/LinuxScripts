@@ -25,6 +25,7 @@ avDiff=0;
 
 # INPUT INIT
 
+clear
 echo "If no input given, default refresh rate is 0.25 s."
 echo "Input Refresh Rate (s):"
 read step
@@ -39,6 +40,7 @@ then
 	sleep 3
 fi
 
+clear
 echo "If no input given, default sample length is 4 s."
 echo "Input sample length for average calculation (s):"
 read avStep
