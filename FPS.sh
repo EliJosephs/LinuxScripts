@@ -60,6 +60,7 @@ fi
 
 # MAIN LOOP
 
+mainIt=0
 while : 
 do
 	# Local repeated INIT
@@ -72,6 +73,9 @@ do
 	do
 		x=$((x + 1)) # Count for time $step
 	done
+
+	FPS=$(( x / step))
+
 
 	# Average calculation
 	if [ $averageStart -eq 0 ]
@@ -88,6 +92,22 @@ do
 		totalCount=$(( totalCount + x ))	
 	fi
 
+	
+	# Max and Mins
+	if [ $mainIt -eq 0 ]
+	then
+		mainIt=1
+		max=$FPS
+		min=$max
+	elif [ $FPS -gt $max ]
+	then
+		max=$FPS
+	elif [ $FPS -lt $min ]
+	then
+		min=$FPS
+	fi
+
+
 	totalAv=$(( totalAv + x ))
 	totalAvTime=$(( totalAvTime + step ))
 	atAv=$(( totalAv / totalAvTime ))
@@ -96,7 +116,9 @@ do
 	clear
 	printf "FPS: %.0f\n" $(( x / step))
 	printf "Short Average: %.0f      +(%.0f) / %.2f s\n" $average $avDiff $avStep
-	printf "All Time Average: %.0f      (%.2f s)\n" $atAv $totalAvTime
+	printf "All Time Average: %.0f      (%.2f s)\n\n" $atAv $totalAvTime
+	printf "Max: %.0f\nMin: %.0f" $max $min
 	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
 
+	
 done
