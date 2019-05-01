@@ -23,23 +23,36 @@ avStep=4
 average=0
 avDiff=0;
 
-# INPUT
+# INPUT INIT
 
+echo "If no input given, default refresh rate is 0.25 s."
 echo "Input Refresh Rate (s):"
 read step
 
 if [[ -z "$step" ]] # If no input to variable $step
 then
 	step=0.25
-	echo "No input given, proceeding with refresh of $step s"
-	sleep 3
-
 elif [ $step -lt $maxSpeed ] # If the input step size is too small
 then
 	step=$maxSpeed
 	echo "Refresh rate is too quick, setting to the maximum allowable speed, $step s"
 	sleep 3
 fi
+
+echo "If no input given, default sample length is 4 s."
+echo "Input sample length for average calculation (s):"
+read avStep
+
+if [[ -z "$avStep" ]]
+then
+	avStep=4
+elif [ $avStep -lt 1 ]
+then
+	avStep=1
+	echo "Average becomes useless below 1 second, setting to 1."
+	sleep 2
+fi
+
 
 # MAIN LOOP
 
