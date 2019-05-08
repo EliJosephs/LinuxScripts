@@ -157,7 +157,7 @@ do
 	printf "Short Average: %.0f      ${cyn}+(${end}${chCol}%.0f${end}${cyn}) / %.2f s${end}\n" $average $avDiff $avStep
 	printf "All Time Average: %.0f      (%.2f s)\n\n" $atAv $totalAvTime
 	printf "\e[32;1;44;7mMax: %.0f   At %.0f s ${end}\n\e[31;1;47;7mMin: %.0f   At %.0f s ${end}\n" $max $maxTime $min $minTime
-	printf "\n\n Script Uptime: %.0f s" $totalTime	
+	printf "\n\nScript Uptime: %.0f s\n\n" $totalTime	
 	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
 
 	
