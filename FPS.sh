@@ -31,12 +31,22 @@ average=0
 avDiff=0
 totalAvTime=0
 
+# This is for making colors easy
+
+red=$'\e[31m'
+grn=$'\e[32m'
+yel=$'\e[33m'
+blu=$'\e[34m'
+mag=$'\e[35m'
+cyn=$'\e[36m'
+end=$'\e[0m'
+
 
 # INPUT INIT
 
 clear
-printf "If no input given, default refresh rate is 0.25 s.\n"
-printf "Input Refresh Rate (s):"
+printf "If no input given, default refresh rate is ${cyn}0.25${end} s.\n"
+printf "${cyn}Input Refresh Rate (s):${end}"
 read step
 
 if [[ -z "$step" ]] # If no input to variable $step
@@ -45,13 +55,13 @@ then
 elif [ $step -lt $maxSpeed ] # If the input step size is too small
 then
 	step=$maxSpeed
-	printf "Refresh rate is too quick, setting to the maximum allowable speed, %.2f s" $step
+	printf "Refresh rate is too quick, setting to the maximum allowable speed, ${cyn}%.2f${end} s" $step
 	sleep 3
 fi
 
 clear
-printf "If no input given, default sample length is 4 s.\n"
-printf "Input sample length for average calculation (s):"
+printf "If no input given, default sample length is ${cyn}4${end} s.\n"
+printf "${cyn}Input sample length for average calculation (s):${end}"
 read avStep
 
 if [[ -z "$avStep" ]]
@@ -101,31 +111,53 @@ do
 
 	
 	# Max and Mins
+
+	totalTime=$(( `date +%s` - startedTime ))
+
 	if [ $mainIt -eq 0 ]
 	then
 		mainIt=1
 		max=$FPS
 		min=$max
+		maxTime=$totalTime
+		minTime=$totalTime
 	elif [ $FPS -gt $max ]
 	then
 		max=$FPS
+		maxTime=$totalTime
 	elif [ $FPS -lt $min ]
 	then
 		min=$FPS
+		minTime=$totalTime
 	fi
 
 
 	totalAv=$(( totalAv + x ))
 	totalAvTime=$(( totalAvTime + step ))
 	atAv=$(( totalAv / totalAvTime ))
+	
+
+	
+	# Color code +- of FPS counter
+
+	if [ $avDiff -lt 0 ]
+	then
+		chCol=$'\e[31m'
+	elif [ $avDiff -gt 0 ]
+	then
+		chCol=$'\e[32m'
+	else
+		chCol=$'\e[35m'
+	fi
+	
 
 	# Printing
 	clear
-	printf "FPS: %.0f\n" $(( x / step))
-	printf "Short Average: %.0f      +(%.0f) / %.2f s\n" $average $avDiff $avStep
+	printf "\e[47;1;31;1m FPS: %.0f ${end}\n" $(( x / step))
+	printf "Short Average: %.0f      ${cyn}+(${end}${chCol}%.0f${end}${cyn}) / %.2f s${end}\n" $average $avDiff $avStep
 	printf "All Time Average: %.0f      (%.2f s)\n\n" $atAv $totalAvTime
-	printf "Max: %.0f\nMin: %.0f\n" $max $min
-	printf "\n\n Script Uptime: %.0f s" $(( `date +%s` - startedTime ))
+	printf "\e[32;1;44;7mMax: %.0f   At %.0f s ${end}\n\e[31;1;47;7mMin: %.0f   At %.0f s ${end}\n" $max $maxTime $min $minTime
+	printf "\n\n Script Uptime: %.0f s" $totalTime	
 	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
 
 	
