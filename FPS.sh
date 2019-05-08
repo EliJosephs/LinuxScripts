@@ -129,10 +129,24 @@ do
 	totalAvTime=$(( totalAvTime + step ))
 	atAv=$(( totalAv / totalAvTime ))
 
+	
+	# Color code +- of FPS counter
+
+	if [ $avDiff -lt 0 ]
+	then
+		chCol=$'\e[31m'
+	elif [ $avDiff -gt 0 ]
+	then
+		chCol=$'\e[32m'
+	else
+		chCol=$'\e[35m'
+	fi
+	
+
 	# Printing
 	clear
 	printf "\e[47;1;31;1m FPS: %.0f ${end}\n" $(( x / step))
-	printf "Short Average: %.0f      +(%.0f) / %.2f s\n" $average $avDiff $avStep
+	printf "Short Average: %.0f      ${cyn}+(${end}${chCol}%.0f${end}${cyn}) / %.2f s${end}\n" $average $avDiff $avStep
 	printf "All Time Average: %.0f      (%.2f s)\n\n" $atAv $totalAvTime
 	printf "\e[32;1;44;7mMax: %.0f ${end}\n\e[31;1;47;7mMin: %.0f ${end}\n" $max $min
 	printf "\n\n Script Uptime: %.0f s" $(( `date +%s` - startedTime ))
