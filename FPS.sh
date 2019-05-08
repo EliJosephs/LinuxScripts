@@ -31,7 +31,7 @@ average=0
 avDiff=0
 totalAvTime=0
 
-# This is for making colors easy
+# This is for making colors easy, variable names copied from jasonwryan on StackExchange
 
 red=$'\e[31m'
 grn=$'\e[32m'
