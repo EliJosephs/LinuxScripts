@@ -111,23 +111,31 @@ do
 
 	
 	# Max and Mins
+
+	totalTime=$(( `date +%s` - startedTime ))
+
 	if [ $mainIt -eq 0 ]
 	then
 		mainIt=1
 		max=$FPS
 		min=$max
+		maxTime=$totalTime
+		minTime=$totalTime
 	elif [ $FPS -gt $max ]
 	then
 		max=$FPS
+		maxTime=$totalTime
 	elif [ $FPS -lt $min ]
 	then
 		min=$FPS
+		minTime=$totalTime
 	fi
 
 
 	totalAv=$(( totalAv + x ))
 	totalAvTime=$(( totalAvTime + step ))
 	atAv=$(( totalAv / totalAvTime ))
+	
 
 	
 	# Color code +- of FPS counter
@@ -148,8 +156,8 @@ do
 	printf "\e[47;1;31;1m FPS: %.0f ${end}\n" $(( x / step))
 	printf "Short Average: %.0f      ${cyn}+(${end}${chCol}%.0f${end}${cyn}) / %.2f s${end}\n" $average $avDiff $avStep
 	printf "All Time Average: %.0f      (%.2f s)\n\n" $atAv $totalAvTime
-	printf "\e[32;1;44;7mMax: %.0f ${end}\n\e[31;1;47;7mMin: %.0f ${end}\n" $max $min
-	printf "\n\n Script Uptime: %.0f s" $(( `date +%s` - startedTime ))
+	printf "\e[32;1;44;7mMax: %.0f   At %.0f s ${end}\n\e[31;1;47;7mMin: %.0f   At %.0f s ${end}\n" $max $maxTime $min $minTime
+	printf "\n\n Script Uptime: %.0f s" $totalTime	
 	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
 
 	
