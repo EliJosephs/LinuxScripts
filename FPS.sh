@@ -116,7 +116,6 @@ do
 
 	if [ $mainIt -eq 0 ]
 	then
-		mainIt=1
 		max=$FPS
 		min=$max
 		maxTime=$totalTime
@@ -136,6 +135,24 @@ do
 	totalAvTime=$(( totalAvTime + step ))
 	atAv=$(( totalAv / totalAvTime ))
 	
+
+	# Graph Line Generation
+	if [ $mainIt -eq 0 ]
+	then
+		ma1=($max $maxTime)
+		ma2=0
+		ma3=0
+
+		mi1=($min $minTime)
+		mi2=(0 0)
+		mi3=(0 0)
+	elif [ "${ma1[0]}" -lt $max ]
+	then
+		ma3=${ma2[@]}
+		ma2=${ma1[@]}
+		ma1=($max $maxTime)
+		echo "RUNNING UPDATER   $totalTime"		
+	fi
 
 	
 	# Color code +- of FPS counter
@@ -158,7 +175,16 @@ do
 	printf "All Time Average: %.0f      (%.2f s)\n\n" $atAv $totalAvTime
 	printf "\e[32;1;44;7mMax: %.0f   At %.0f s ${end}\n\e[31;1;47;7mMin: %.0f   At %.0f s ${end}\n" $max $maxTime $min $minTime
 	printf "\n\nScript Uptime: %.0f s\n\n" $totalTime	
-	#echo "Debug line: $(( `date +%s.%N` - averageStart ))"
+	
+	# Printing graph stuff
+	
+	printf "ma1: %.0f\nma2: %.0f\nma3: %.0f\n" "${ma1[0]}" "${ma2[0]}" "${ma3[0]}" #$line1 $line2 $line3
+	
+	echo "Debug line: ${ma1[@]} B ${ma2[@]} C ${ma3[@]}   $mainIt"
 
+	if [ $mainIt -eq 0 ]
+	then 
+		mainIt=1
+	fi
 	
 done
